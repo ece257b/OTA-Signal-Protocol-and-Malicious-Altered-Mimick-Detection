@@ -1,0 +1,6 @@
+[submodule "modules/cyclostationary"]
+	path = modules/cyclostationary
+	url = git@github.com:ucsdwcsng/cyclostationary.git
+[submodule "modules/utilities"]
+	path = modules/utilities
+	url = git@github.com:ucsdwcsng/utilities.git
