@@ -11,10 +11,10 @@ function detected_signal = filterFskFamily(nonConj1D, conj1D, alphas)
 
     for i=1:2
         if abs((abs(alphas(locs_conj(i))) + abs(alphas(locs_conj(i+1)))) - sym_rate_alpha)<0.05
-            detected_signal = 'MSK/GMSK';
+            detected_signal = 'msk/gmsk';
             break;
         else
-            detected_signal = 'FSK/GFSK';
+            detected_signal = 'fsk/gfsk';
         end
     end
 

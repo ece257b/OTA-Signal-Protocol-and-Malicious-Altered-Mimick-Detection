@@ -1,4 +1,4 @@
-function filtered_alphas = filterDsssLike(non_conj_alphas)
+function flags = filterDsssLike(non_conj_alphas)
 
 % This function takes in a list of non-conjugate cycle frequencies
 % (obtained after thresholding a cyclic feature function) and identifies if
@@ -16,9 +16,9 @@ function filtered_alphas = filterDsssLike(non_conj_alphas)
     freq_ratios = freq_list / fundamentalFreq;
     harmonicIndices = find(mod(freq_ratios, 1) <= harmomic_threshold);
     harmonics = {};
-    
-    for i = harmonicIndices
-        harmonics{end+1} = freq_list(mod(find(freq_ratios == i, 1)-1:length(freq_ratios)-1, length(freqRatio))+1);
-    end
-
+%     
+%     for i = harmonicIndices
+%         harmonics{end+1} = freq_list(mod(find(freq_ratios == i, 1)-1:length(freq_ratios)-1, length(freqRatio))+1);
+%     end
+    flags = 0;
 end
