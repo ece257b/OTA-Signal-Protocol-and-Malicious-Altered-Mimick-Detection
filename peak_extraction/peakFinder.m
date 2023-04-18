@@ -1,22 +1,24 @@
-function cycle_peaks = peakFinder(output, alphas, config_path)
+function cycle_peaks = peakFinder(output, alphas, config_path, type)
 
     % read in the config
     config = yaml.loadFile(config_path);
     offset_scale = config.filter_offset;
     order = config.filter_order;
 
-    % remove alpha = 0 peak
-    [~, max_ind] = max(output);
-    output(max_ind-50:max_ind+50) = output(max_ind-49);
+    % remove alpha = 0 peak for non-conjugate
+    if strcmp(type,'nonconj')==1
+        [~, max_ind] = max(output);
+        output(max_ind-50:max_ind+50) = output(max_ind-49);
+    end
 
     threshold = medfilt1(output,order);
-    
-    figure
-    plot(output)
-    hold on
-    thresh = 2.3*threshold ;
-    % thresh = threshold+offset_scale*mean(output(1000:2000));
-    plot(thresh,'--')
+%     
+%     figure
+%     plot(output)
+%     hold on
+    thresh = 2.1*threshold ;
+%     thresh = threshold+offset_scale*mean(output(1000:2000));
+%     plot(thresh,'--')
     
     indices = find(output>thresh);
     diff_arr = diff(indices);
@@ -39,6 +41,9 @@ function cycle_peaks = peakFinder(output, alphas, config_path)
         disp("No alphas detected!")
         cycle_peaks = 0;
     else
+        % reject the first few and last few alphas as they are spurious
+        midpoints = midpoints(midpoints>3000);
+        midpoints = midpoints(midpoints<14000);
         cycle_peaks = alphas(midpoints);
     end
 

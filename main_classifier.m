@@ -1,5 +1,6 @@
-folder = "/mnt/ext_hdd_18tb/rmathuria/modClass_sim_searchlight/modClass_sim_searchlight/modClass_sim/";
-metadata_folder = "/mnt/ext_hdd_18tb/rmathuria/modClass_sim_top/modClass_sim/";
+folder = "/storage/data/rmathuria/cyclo/QAM_searchlight/QAM/";
+metadata_folder = "/storage/data/rmathuria/cyclo/QAM/";
+prediction_save_folder = "/storage/data/rmathuria/modClass/QAM_preds/";
 files = dir(folder);
 
 cnt = 1;
