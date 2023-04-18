@@ -27,7 +27,7 @@ function detected_signal = decisionTree(in)
     conjCoh1D = S.remapTo1DPlot(conjCohEst,0,"sum",0);
     nonConjCoh1D = S.remapTo1DPlot(nonConjCohEst,0,"sum",0);
     
-    conj_alphas = peakFinder(conjCoh1D,alphas,"../configs/conjugate.yaml");
+    conj_alphas = peakFinder(conj1D,alphas,"../configs/conjugate.yaml");
     non_conj_alphas = peakFinder(nonConjCoh1D,alphas,"../configs/non_conjugate.yaml");
     
     % step 1: filter out using conjugate peaks into 2 groups
@@ -51,7 +51,7 @@ function detected_signal = decisionTree(in)
     % Now running the non_conjugate side 
     else
         if non_conj_alphas == 0
-            if additionalOfdmCheck(samplesIQ)
+            if filterOfdm(in)
                 detected_signal = 'ofdm';
             else
                 detected_signal = 'NOTA';

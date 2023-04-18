@@ -5,12 +5,17 @@ function cycle_peaks = peakFinder(output, alphas, config_path)
     offset_scale = config.filter_offset;
     order = config.filter_order;
 
+    % remove alpha = 0 peak
+    [~, max_ind] = max(output);
+    output(max_ind-50:max_ind+50) = output(max_ind-49);
+
     threshold = medfilt1(output,order);
     
     figure
     plot(output)
     hold on
-    thresh = threshold+offset_scale*mean(threshold(100:200));
+    thresh = 2.3*threshold ;
+    % thresh = threshold+offset_scale*mean(output(1000:2000));
     plot(thresh,'--')
     
     indices = find(output>thresh);
@@ -29,6 +34,7 @@ function cycle_peaks = peakFinder(output, alphas, config_path)
             midpoints = [midpoints, midpoint];
         end
     end
+    
     if isnan(midpoints)
         disp("No alphas detected!")
         cycle_peaks = 0;
