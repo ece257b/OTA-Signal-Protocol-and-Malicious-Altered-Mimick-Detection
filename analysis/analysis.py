@@ -8,9 +8,42 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 from sklearn.preprocessing import normalize
 
-def plot_quantities(master_dict):
-    pass
+def plot_quantities(master_dict, metric):
 
+    for modulation, data_list in master_dict.items():
+        print(modulation)
+        param_accuracy = {}
+        for data in data_list:
+            param = data[metric]
+            param = round(param / 5) * 5
+            ground_truth = data['truth']
+            prediction = data['prediction']
+            accuracy = 1 if ground_truth == prediction else 0
+            param_accuracy.setdefault(param, []).append(accuracy)
+
+        param_values = []
+        accuracies = []
+            
+        for param, accuracy_list in param_accuracy.items():           
+                param_values.append(param)
+                accuracies.append(sum(accuracy_list) / len(accuracy_list))
+
+        param_values, accuracies = zip(*sorted(zip(param_values, accuracies)))
+        title = f"Accuracy per {metric} for {modulation}"
+
+        plt.plot(param, accuracies, marker='o', label=str(param))
+        plt.title(title)
+        plt.xlabel(metric)
+        plt.ylabel('Accuracy')
+        plt.grid(True)
+        plt.show()
+        
+def data_per_class(master_dict):
+    data_count = {}
+    for modulations in master_dict.keys():
+         data_count[modulations] = len(master_dict[modulations])
+    return data_count
+         
 def get_confusion_matrix(master_dict):
     ground_truth_labels = []
     predicted_labels = []
@@ -33,7 +66,6 @@ def get_confusion_matrix(master_dict):
     plt.ylabel('True Label')
     plt.tight_layout()
     plt.show()
-
 
 def create_master_dict(top_folder):
     master_dict = {}
