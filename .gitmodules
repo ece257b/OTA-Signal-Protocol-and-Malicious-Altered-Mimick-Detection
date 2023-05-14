@@ -4,3 +4,6 @@
 [submodule "modules/utilities"]
 	path = modules/utilities
 	url = git@github.com:ucsdwcsng/utilities.git
+[submodule "modules/yaml"]
+	path = modules/yaml
+	url = git@github.com:MartinKoch123/yaml.git
