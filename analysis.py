@@ -12,10 +12,12 @@ def plot_quantities(master_dict, metric):
 
     for modulation, data_list in master_dict.items():
         print(modulation)
+        if modulation == 'ook':
+             continue
         param_accuracy = {}
         for data in data_list:
             param = data[metric]
-            param = round(param / 5) * 5
+            param = round(param / 3) * 3
             ground_truth = data['truth']
             prediction = data['prediction']
             accuracy = 1 if ground_truth == prediction else 0
@@ -30,8 +32,7 @@ def plot_quantities(master_dict, metric):
 
         param_values, accuracies = zip(*sorted(zip(param_values, accuracies)))
         title = f"Accuracy per {metric} for {modulation}"
-
-        plt.plot(param, accuracies, marker='o', label=str(param))
+        plt.plot(param_values, accuracies, marker='o', label=str(param))
         plt.title(title)
         plt.xlabel(metric)
         plt.ylabel('Accuracy')
@@ -95,5 +96,8 @@ if __name__ == '__main__':
     top_folder = '/mnt/ext_hdd_18tb/rmathuria/analysis_jsons_sunday/'
     master_dict = create_master_dict(top_folder)
     get_confusion_matrix(master_dict)
-    plot_quantities(master_dict, 'SNR')
+    plot_quantities(master_dict, 'snrBefore')
+    plot_quantities(master_dict, 'snrAfter')
+   
+
     
