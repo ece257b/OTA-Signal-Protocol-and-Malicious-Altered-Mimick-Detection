@@ -1,19 +1,7 @@
-function cycle_peaks = peakFinder(out, config_path, type)
-
-    % read in the config
-    config = yaml.loadFile(config_path);
-    offset_scale = config.filter_offset;
-    order = config.filter_order;
-
-    % remove alpha = 0 peak for non-conjugate
-%     if strcmp(type,'nonconj')==1
-%         [~, max_ind] = max(output);
-%         output(max_ind-50:max_ind+50) = output(max_ind-49);
-%     end
-
-   
+function cycle_peaks = peakFinder(out, type)
+  
     if strcmp(type,'conj')
-        threshold = medfilt1(out.conjMaxCff,order);
+        threshold = medfilt1(out.conjMaxCff,100);
         output = out.conjMaxCff;
         thresh = 3*threshold ;
 % 
@@ -22,7 +10,7 @@ function cycle_peaks = peakFinder(out, config_path, type)
 %         hold on
 %         plot(thresh,'--')
     elseif strcmp(type,'nonconj')
-        threshold = medfilt1(out.nonConjMaxCff,order);
+        threshold = medfilt1(out.nonConjMaxCff,300);
         output = out.nonConjMaxCff;
         thresh = 2.3*threshold;
 % 

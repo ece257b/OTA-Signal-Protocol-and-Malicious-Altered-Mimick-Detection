@@ -6,13 +6,13 @@ function detected_signal = decisionTree(in,fs)
     S = sscaClass(N, Np, 100, 200);
     out = S.process(in);       
      
-    conj_alphas = peakFinder(out,"configs/conjugate.yaml",'conj');
-    non_conj_alphas = peakFinder(out,"configs/non_conjugate.yaml",'nonconj');
+    conj_alphas = peakFinder(out,'conj');
+    non_conj_alphas = peakFinder(out,'nonconj');
 
     detected_signal = 'unknown';
     
     if strcmp(detected_signal,'unknown')
-        if length(conj_alphas)>2
+        if length(conj_alphas)>=1
             detected_signal = filterBpskBfsk(in,out,non_conj_alphas);
         end 
     end 
@@ -29,7 +29,12 @@ function detected_signal = decisionTree(in,fs)
             if modOrder == 1
                 modOrder =2;
             end 
-            detected_signal = 'g/fsk'+2^round(log2(modOrder));
+            modOrder = 2^round(log2(modOrder));
+            if modOrder == 2
+                detected_signal = 'g/fsk2';
+            else
+                detected_signal = strcat('fsk',num2str(modOrder));
+            end
         end 
     else
         return
@@ -38,16 +43,16 @@ function detected_signal = decisionTree(in,fs)
 %     if isempty(conj_alphas)
 %         detected_signal = filterWiFi(out,fs);
 %     end 
-    
-    if strcmp(detected_signal,'unknown')
-        if length(conj_alphas)>1
-            if fs>=1e6 && fs<=3.5e6
-                detected_signal = filterBle(out,fs);
-            end
-        end
-    else
-        return
-    end 
+%     
+%     if strcmp(detected_signal,'unknown')
+%         if length(conj_alphas)>1
+%             if fs>=1e6 && fs<=3.5e6
+%                 detected_signal = filterBle(out,fs);
+%             end
+%         end
+%     else
+%         return
+%     end 
     if strcmp(detected_signal,'unknown')
         detected_signal = filterMskGmsk(out,non_conj_alphas);
     else

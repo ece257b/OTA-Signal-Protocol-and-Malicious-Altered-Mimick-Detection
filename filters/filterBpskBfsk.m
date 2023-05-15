@@ -21,7 +21,14 @@ function detected_signal=filterBpskBfsk(in,out,non_conj_alphas)
         end 
     elseif filterFsk(in,out) == 2
         detected_signal = 'g/fsk2';
-        return
+        return 
+    elseif length(detectTone(in)) ==1
+        % distance between peaks in conj = symbol rate
+        condition =  abs(abs(out.alphas(locs_conj(1))) - abs(2*detectTone(in))) < 0.03 ;
+        if condition
+            detected_signal = 'ook';
+            return
+        end
     end
 
     % Is the relative distance between the peaks same? 

@@ -92,8 +92,8 @@ def create_master_dict(top_folder):
     return master_dict
 
 if __name__ == '__main__':
-    top_folder = '/mnt/ext_hdd_18tb/rmathuria/analysis_jsons/'
+    top_folder = '/mnt/ext_hdd_18tb/rmathuria/analysis_jsons_sunday/'
     master_dict = create_master_dict(top_folder)
     get_confusion_matrix(master_dict)
-
+    plot_quantities(master_dict, 'SNR')
     
