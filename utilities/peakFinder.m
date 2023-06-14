@@ -1,4 +1,4 @@
-function cycle_peaks = peakFinder(out, type)
+function [cycle_peaks, cycle_peak_heights] = peakFinder(out, type)
   
     if strcmp(type,'conj')
         threshold = medfilt1(out.conjMaxCff,100);
@@ -10,8 +10,8 @@ function cycle_peaks = peakFinder(out, type)
 %         hold on
 %         plot(thresh,'--')
     elseif strcmp(type,'nonconj')
-        threshold = medfilt1(out.nonConjMaxCff,300);
-        output = out.nonConjMaxCff;
+        threshold = medfilt1(out.nonConjSumCff,300);
+        output = out.nonConjSumCff;
         thresh = 2.3*threshold;
 % 
 %         figure
@@ -40,6 +40,7 @@ function cycle_peaks = peakFinder(out, type)
     if isnan(midpoints)
 %         disp("No alphas detected!")
         cycle_peaks = 0;
+        cycle_peak_heights = 0;
     else
         % reject the first few and last few alphas as they are spurious
         if(strcmp(type,'conj'))
@@ -47,14 +48,12 @@ function cycle_peaks = peakFinder(out, type)
             midpoints = midpoints(midpoints<16000);
             cycle_peaks = round((out.alphas(midpoints)),2);
         else
-            midpoints = midpoints(midpoints>1000);
+            midpoints = midpoints(midpoints>500);
             midpoints = midpoints(midpoints<15000);
             cycle_peaks = out.alphas(midpoints);
-%             pos_ind = round(cycle_peaks(cycle_peaks>0),2);
-%             neg_ind = round(abs(cycle_peaks(cycle_peaks<0)),2);
-%             common_indices = intersect(pos_ind, neg_ind);
-%             cycle_peaks = common_indices;
         end
-      
+
+        % also return the peak heights
+        cycle_peak_heights = output(midpoints);     
     end 
 end

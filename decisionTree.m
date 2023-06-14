@@ -1,28 +1,33 @@
-function detected_signal = decisionTree(in,fs)
+function [detected_signal,sym_rate] = decisionTree(in,fs)
+    sym_rate = 0;
+    if length(in)<(2046+128) % This is the minimum resolution below which the algorithm will not run
+        return
+    else
+        [N, Np] = returnSscaParams(length(in)); % Dynamically vary N, Np based on length of signal
+    end
 
-    N = 8192;
-    Np = 128;
-    
     S = sscaClass(N, Np, 100, 200);
     out = S.process(in);       
      
-    conj_alphas = peakFinder(out,'conj');
-    non_conj_alphas = peakFinder(out,'nonconj');
+    [conj_alphas, ~] = peakFinder(out,'conj');
+    [non_conj_alphas, non_conj_alphas_hts] = peakFinder(out,'nonconj');
 
-    detected_signal = 'unknown';
-    
+    detected_signal = 'unknown'; % before starting, assign an unknown label to the modulation
+
+    if strcmp(detected_signal,'unknown')
+        if ~(filterToneCfs(in,out))
+            detected_signal = filterDsssLike(non_conj_alphas,non_conj_alphas_hts,fs);
+        end 
+    else
+        return
+    end 
+
     if strcmp(detected_signal,'unknown')
         if length(conj_alphas)>=1
             detected_signal = filterBpskBfsk(in,out,non_conj_alphas);
         end 
-    end 
-    if strcmp(detected_signal,'unknown')
-        if isempty(detectTone(in))
-        detected_signal = filterDsssLike(non_conj_alphas);
-        end 
-    else
-        return
     end
+  
     if strcmp(detected_signal,'unknown')
         modOrder = filterFsk(in,out);
         if ~isempty(modOrder)
@@ -40,34 +45,24 @@ function detected_signal = decisionTree(in,fs)
         return
     end 
  
-%     if isempty(conj_alphas)
-%         detected_signal = filterWiFi(out,fs);
-%     end 
-%     
-%     if strcmp(detected_signal,'unknown')
-%         if length(conj_alphas)>1
-%             if fs>=1e6 && fs<=3.5e6
-%                 detected_signal = filterBle(out,fs);
-%             end
-%         end
-%     else
-%         return
-%     end 
     if strcmp(detected_signal,'unknown')
-        detected_signal = filterMskGmsk(out,non_conj_alphas);
+        if ~(filterToneCfs(in,out))
+            detected_signal = filterMskGmsk(in, out,non_conj_alphas,conj_alphas);
+        end
     else
         return
+    end 
+    if strcmp(detected_signal,'unknown')
+        detected_signal = filterFsk8(in, out);
     end 
 
     if strcmp(detected_signal,'unknown')
         if ~isempty(non_conj_alphas)
-            if isempty(detectTone(in))
-                detected_signal =  filterDqam(conj_alphas,non_conj_alphas);
+            if ~(filterToneCfs(in,out))
+                detected_signal =  filterDqam(in,conj_alphas,non_conj_alphas);
             end 
         end
     else
         return
-    end
-
-    
+    end     
 end 

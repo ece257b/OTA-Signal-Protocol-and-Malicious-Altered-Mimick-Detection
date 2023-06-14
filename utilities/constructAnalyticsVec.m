@@ -1,16 +1,12 @@
-function constructAnalyticsVec(meta,folder,fname,gt,pred)
-    analysis_meta = struct();
-    analysis_meta.trueEsNo = meta.trueEsNo;
-    analysis_meta.SNR = meta.SNR;
-    analysis_meta.ENR = meta.ENR;
-    analysis_meta.snrAfter = meta.snrAfter;
-    analysis_meta.trueBandwidth = meta.trueBandwidth;
-    analysis_meta.boxSize = meta.freqHi-meta.freqLo;
+function constructAnalyticsVec(meta, folder, fname, gt, pred,symbol_rate)
+    base_folder = "/mnt/ext_hdd18tb/rmathuria/modulation/simulated/analysis_jsons_real_final/";
+    % Handle missing entries
+    analysis_meta = meta;  
+    analysis_meta.boxSize = meta.freqHi - meta.freqLo;
     analysis_meta.prediction = pred;
     analysis_meta.truth = gt;
-    analysis_meta.snrBefore = meta.snrBefore;
 
-    % extract channel through regex (temporary hack)
+%     extract channel through regex (temporary hack)
     pattern = '_([0-9]+)';
     match = regexp(fname, pattern, 'tokens', 'once');
 
@@ -19,12 +15,18 @@ function constructAnalyticsVec(meta,folder,fname,gt,pred)
         number = str2double(match{1});
         analysis_meta.channel = number;
     end
+    matches = regexp(fname, '_(\d*\.?\d+)_', 'tokens');
 
+    % Extract the matched substring
+    number=matches{2};  
+    analysis_meta.trueSymRate = str2double(number);
+ 
+    analysis_meta.symRate = symbol_rate;
     jsonStr = jsonencode(analysis_meta);
-    filename = strcat(fname,'.json');
-    fullPath = fullfile('/mnt/ext_hdd_18tb/rmathuria/analysis_jsons_sunday/',folder, filename);
-
+    filename = strcat(fname, '.json');
+       
+    fullPath = fullfile(base_folder,folder, filename);
     fileID = fopen(fullPath, 'w');
     fprintf(fileID, jsonStr);
     fclose(fileID);
-end 
+end

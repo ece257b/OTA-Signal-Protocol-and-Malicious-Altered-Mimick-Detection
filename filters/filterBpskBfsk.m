@@ -1,4 +1,6 @@
 function detected_signal=filterBpskBfsk(in,out,non_conj_alphas)
+% This function detects BPSK and BFSK modulations in the given input signal
+% by implementing the rules for these 2 modulations.
 
     detected_signal = 'unknown';
     [~, locs_nconj, ~, ~] = findpeaks(out.nonConjMaxCff, "NPeaks",3,"SortStr","descend");
@@ -9,16 +11,19 @@ function detected_signal=filterBpskBfsk(in,out,non_conj_alphas)
     sort_locs_conj = sort(locs_conj);
     
     if isempty(detectTone(in))
-        if length(non_conj_alphas)<4
         % distance between peaks in conj = symbol rate
         sym_rate_alpha = abs(round(out.alphas(locs_nconj(2)),2));
         conj_alpha_dist = computeAlphaDistance(out.alphas(locs_conj));
-        condition =  abs(conj_alpha_dist - sym_rate_alpha) < 0.03 ;
+        condition =  abs(conj_alpha_dist - sym_rate_alpha) < 0.02 ;
         if any(condition)
-            detected_signal = 'bpsk';
-            return
+            flag =1;
+            if flag == 1
+                detected_signal = 'bpsk';
+                return
+            else
+                detected_signal = 'noise';
+            end
         end
-        end 
     elseif filterFsk(in,out) == 2
         detected_signal = 'g/fsk2';
         return 

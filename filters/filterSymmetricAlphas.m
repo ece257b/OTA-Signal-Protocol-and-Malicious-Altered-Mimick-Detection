@@ -1,6 +1,5 @@
-function flag = filterSymmetricAlphas(non_conj_alphas)
+function flag= filterSymmetricAlphas(non_conj_alphas)
     flag = 0;
-
     pos_alpha = round(non_conj_alphas(non_conj_alphas>0),2);
     neg_alpha = -1*round(non_conj_alphas(non_conj_alphas<0),2);
   

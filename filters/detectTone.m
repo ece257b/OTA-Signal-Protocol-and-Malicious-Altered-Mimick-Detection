@@ -11,9 +11,9 @@ function freqs = detectTone(in)
 
     % smoothen it
     spec = conv(ones(1,5),spec);
-    thresh = medfilt1(spec,50);
+    thresh = medfilt1(spec,80);
 
-    indices = find(spec>2*thresh);
+    indices = find(spec>2.5*thresh);
 
     % find the set of consecutive indices and replace them by the average
     % value, convert to normalized frequency
@@ -37,11 +37,6 @@ function freqs = detectTone(in)
     if length(freqs)>=1
         flag = 1;
     end
-
-%     figure
-%     plot(spec)
-%     hold on
-%     plot(thresh*4)
 
     if flag ==0
         freqs = [];

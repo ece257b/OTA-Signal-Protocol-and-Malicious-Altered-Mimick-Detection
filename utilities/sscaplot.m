@@ -1,22 +1,29 @@
 function sscaplot(in, N, Np)
-
-    S = sscaClass(N, Np, 100, 200, 1);
-    conjScfEst = S.process(in);
     
-    S = sscaClass(N, Np, 100, 200, 0);
-    nonConjScfEst = S.process(in);
+    if length(in)<N+Np
+        in = [in; zeros(1,9000-length(in))'];
+    end
 
+    S = sscaClass(N, Np, 100, 200);
+    out = S.process(in);
+    
     figure
-    S.plotAll(conjScfEst, nonConjScfEst,"sum")
-
-%    figure
- %   S.plotOtherThree(in,"sum")
-
-    nonConjCoh = S.getCoherence(nonConjScfEst,in);
-    conjCoh = S.getCoherence(conjScfEst,in);
-
-    figure
-    S.plotAll(conjCoh, nonConjCoh,"max");
-    peak_loc_nonconj = S.findAlphaPeaks(nonConjCoh);
+    subplot(221)
+    S.plotInKQDomain(this, out.nonConjScf)
+    title('Non conj KQ')
+    
+    subplot(222)
+    S.plotInKQDomain(this,out.conjScf)
+    title('Conj KQ')
+    
+    subplot(223)
+    plot(out.alphas, out.nonConjMaxCff)
+    grid on
+    title('Non conj CFF')
+    
+    subplot(224)
+    plot(out.alphas, out.conjMaxCff)
+    grid on
+    title('Conj CFF')
 
 end

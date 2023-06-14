@@ -1,22 +1,20 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % main_classifier.m 
 % Main 1D feature classifier script 
-%
+% 
 % Author: Radhika Mathuria
 % Date created: 20 April 2023
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-close all; clear
-
-config       = yaml.loadFile("test.yaml");
-top_folder   = config.main_folder_path;
+top_folder ="/mnt/ext_hdd18tb/rmathuria/modulation/simulated/real_searchlight/";
 
 sprintf('Processing top-level folder %s', top_folder)
 folders      = dir(top_folder);
 folders(1:2) = [];
 cnt          = 1;
-
-for k = 2:length(folders)
+pred_list = [];
+truth_list = [];
+for k = 1:length(folders)
 
     folder            = folders(k).name;
     subfolder         = dir(top_folder + folder);
@@ -29,17 +27,14 @@ for k = 2:length(folders)
     for i = 1:length(files)
         if ~(files(i).name(end-4:end) == '.json')
 
-            in_iq = read_complex_binary(final_folder_path+files(i).name); 
-            if length(in_iq) < 9000
-                continue;
-            end
-
-            searchlight_metadata = readSearchlightMetadata(final_folder_path + files(i).name+ '.json');
-            pred_mod = decisionTree(in_iq,searchlight_metadata.sampleRate);
-            disp(pred_mod)
+            in_iq = read_complex_binary(fullfile(final_folder_path, files(i).name)); 
+            searchlight_metadata = readSearchlightMetadata(final_folder_path+files(i).name+ '.json');
+            [pred_mod, symbol_rate] = decisionTree(in_iq,searchlight_metadata.sampleRate);
             gt_mod   = cell2mat(regexp(files(i).name,'^[^_]*', 'match'));
             gt_mod   = groundTruthModulation(gt_mod);
-
+%             disp(gt_mod)
+%             disp(pred_mod)
+                      
             pred_list{cnt}  = pred_mod;
 
             if strcmp(gt_mod,'g/fsk')
@@ -48,19 +43,17 @@ for k = 2:length(folders)
             else
                 truth_list{cnt} = gt_mod;
             end 
-
+           
             correct_flag = 0;
             if strcmp(pred_mod,gt_mod)
                 correct_flag = 1;
-            end 
-            
-            constructAnalyticsVec(searchlight_metadata, folder, files(i).name, gt_mod, pred_mod);
+            end
+
+            constructAnalyticsVec(searchlight_metadata, folder, files(i).name, gt_mod, pred_mod,symbol_rate);
             cnt = cnt + 1;
         end
     end
 end
-
-% Construct Normalized confusion matrix 
 
 figure
 
@@ -68,4 +61,6 @@ cm = confusionchart(truth_list, pred_list,'Normalization','row-normalized');
 cm.Title = 'Modulation Confusion Matrix';
 cm.XLabel = 'Predicted Modulation';
 cm.YLabel = 'Actual Modulation';
+
+
 
