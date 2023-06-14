@@ -3,9 +3,13 @@
 This repository contains the codebase for blind modulation recognition using second-order cyclostationary features. 
 
 ## Pre-processing 
+The necessary pre-processing steps for the classifier are the application of an energy detector after the datasets are created (both synthetic and over-the-air). The performance can be evaluated with both a practical energy detector, as well as a dummy energy detector (to serve as a baseline). Each time-frequency boxed signal should have a 32-bit complex binary I/Q file, as well as metadata associated with it. 
+
 ![./docs/system%20architecture.png](./docs/data_preprocessing.png)
 
 ## Feature Extraction
+For feature extraction, the Strip Spectral Correlation Analyzer (SSCA) is used in order to blindly estimate the cycle frequencies. Apart from cyclostationary features, frequency domain features are also used from the Welch PSD estimate. These features are extracted by median-filtering based thresholding. 
+
 ![./docs/system%20architecture.png](./docs/pre-processing-flow.png)
 
 ## Classifier Algorithm 
