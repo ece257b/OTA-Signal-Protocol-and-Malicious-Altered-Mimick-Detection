@@ -51,3 +51,4 @@ In this structure:
 - You can have as many class folders as needed, depending on the number of classes in your dataset.
 
 3. Run main_classifier.m and the confusion matrix and analysis jsons will be created and stored. 
+4. After the classifier runs, the prediction jsons will be stored in a folder. Use that folder and run the analysis.py script in order to obtain plots of different quantities with respect to accuracy. 
