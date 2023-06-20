@@ -7,6 +7,9 @@ The necessary pre-processing steps for the classifier are the application of an 
 
 ![./docs/system%20architecture.png](./docs/data_preprocessing.png)
 
+These pre-processing steps are laid out in a separate repository, which can be cloned and used for this purpose. 
+https://github.com/ucsdwcsng/synapse_preprocessing/tree/main
+
 ## Feature Extraction
 For feature extraction, the Strip Spectral Correlation Analyzer (SSCA) is used in order to blindly estimate the cycle frequencies. Apart from cyclostationary features, frequency domain features are also used from the Welch PSD estimate. These features are extracted by median-filtering based thresholding. 
 
