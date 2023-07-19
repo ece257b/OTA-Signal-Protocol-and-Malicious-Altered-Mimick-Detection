@@ -23,7 +23,7 @@ if ~isempty(non_conj_alphas)
                 end
             end
             if cnt <ceil(0.3*length(rounded_ratios))
-                flags = 1;
+%                 flags = 1;
                 if non_conj_alphas(1)*fs < 1.8e6 && non_conj_alphas(1)*fs > 1.7e6
                     detected_signal = 'wifidsss';
                 else

@@ -4,20 +4,12 @@ function [cycle_peaks, cycle_peak_heights] = peakFinder(out, type)
         threshold = medfilt1(out.conjMaxCff,100);
         output = out.conjMaxCff;
         thresh = 3*threshold ;
-% 
-%         figure
-%         plot(output)
-%         hold on
-%         plot(thresh,'--')
+
     elseif strcmp(type,'nonconj')
         threshold = medfilt1(out.nonConjSumCff,300);
         output = out.nonConjSumCff;
         thresh = 2.3*threshold;
-% 
-%         figure
-%         plot(output)
-%         hold on
-%         plot(thresh,'--')
+
     end
 
     indices = find(output>thresh);

@@ -1,5 +1,9 @@
 function [detected_signal,sym_rate] = decisionTree(in,fs)
+
+    % default vals in case function exits early
     sym_rate = 0;
+    detected_signal = "unknown";
+    
     if length(in)<(2046+128) % This is the minimum resolution below which the algorithm will not run
         return
     else

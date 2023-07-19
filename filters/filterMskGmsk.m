@@ -2,7 +2,7 @@ function detected_signal = filterMskGmsk(in, out,non_conj_alphas_thresholded,con
     detected_signal = 'unknown';
     [~, locs_non_conj, ~, ~] = findpeaks(out.nonConjMaxCff, "NPeaks",3,"SortStr","descend");
     [~, locs_conj, ~, ~] = findpeaks(out.conjMaxCff, "NPeaks",2,"SortStr","descend");
-    conj_alphas = out.alphas(locs_conj);
+%     conj_alphas = out.alphas(locs_conj);
     
     sym_rate_alpha = abs(out.alphas(locs_non_conj(2)));
     

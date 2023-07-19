@@ -1,4 +1,4 @@
-function detected_signal=filterBpskBfsk(in,out,non_conj_alphas)
+function detected_signal=filterBpskBfsk(in,out)
 % This function detects BPSK and BFSK modulations in the given input signal
 % by implementing the rules for these 2 modulations.
 

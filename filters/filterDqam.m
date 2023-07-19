@@ -1,4 +1,4 @@
-function detected_signal = filterDqam(in, conj_alphas,non_conj_alphas)
+function detected_signal = filterDqam(conj_alphas,non_conj_alphas)
 % This function detects the presence of QAM/PSK type signals if no
 % conjugate CFs are detected, and only non-conjugate (symmetric) CFs exist.
 
