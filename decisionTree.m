@@ -28,7 +28,7 @@ function [detected_signal,sym_rate] = decisionTree(in,fs)
 
     if strcmp(detected_signal,'unknown')
         if length(conj_alphas)>=1
-            detected_signal = filterBpskBfsk(in,out,non_conj_alphas);
+            detected_signal = filterBpskBfsk(in, out);
         end 
     end
   
@@ -50,9 +50,9 @@ function [detected_signal,sym_rate] = decisionTree(in,fs)
     end 
  
     if strcmp(detected_signal,'unknown')
-        if ~(filterToneCfs(in,out))
+        %if ~(filterToneCfs(in,out))
             detected_signal = filterMskGmsk(in, out,non_conj_alphas,conj_alphas);
-        end
+        %end
     else
         return
     end 
@@ -63,7 +63,7 @@ function [detected_signal,sym_rate] = decisionTree(in,fs)
     if strcmp(detected_signal,'unknown')
         if ~isempty(non_conj_alphas)
             if ~(filterToneCfs(in,out))
-                detected_signal =  filterDqam(in,conj_alphas,non_conj_alphas);
+                detected_signal =  filterDqam(conj_alphas,non_conj_alphas);
             end 
         end
     else

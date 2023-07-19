@@ -6,7 +6,7 @@
 % Date created: 20 April 2023
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-top_folder ="/mnt/ext_hdd18tb/rmathuria/modulation/simulated/real_searchlight/";
+top_folder ="/mnt/modulation/ota/real_searchlight/";
 
 sprintf('Processing top-level folder %s', top_folder)
 folders      = dir(top_folder);
@@ -14,7 +14,7 @@ folders(1:2) = [];
 cnt          = 1;
 pred_list = [];
 truth_list = [];
-for k = 1:length(folders)
+for k = 1:6
 
     folder            = folders(k).name;
     subfolder         = dir(top_folder + folder);
@@ -24,7 +24,7 @@ for k = 1:length(folders)
 
     sprintf('Processing folder: %s .....',folder)
 
-    for i = 1:length(files)
+    for i = 1:100
         if ~(files(i).name(end-4:end) == '.json')
 
             in_iq = read_complex_binary(fullfile(final_folder_path, files(i).name)); 
@@ -49,7 +49,7 @@ for k = 1:length(folders)
                 correct_flag = 1;
             end
 
-            constructAnalyticsVec(searchlight_metadata, folder, files(i).name, gt_mod, pred_mod,symbol_rate);
+            %constructAnalyticsVec(searchlight_metadata, folder, files(i).name, gt_mod, pred_mod,symbol_rate);
             cnt = cnt + 1;
         end
     end
