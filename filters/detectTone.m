@@ -10,7 +10,7 @@ function freqs = detectTone(in)
     flag = 0;
 
     % smoothen it
-    spec = conv(ones(1,5),spec);
+    spec = conv(spec, ones(1,5), "same");
     thresh = medfilt1(spec,80);
 
     indices = find(spec>2.5*thresh);
