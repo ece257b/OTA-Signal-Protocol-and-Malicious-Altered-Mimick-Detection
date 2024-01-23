@@ -3,15 +3,17 @@ function [cycle_peaks, cycle_peak_heights] = peakFinder(out, type)
     if strcmp(type,'conj')
         threshold = medfilt1(out.conjMaxCff,100);
         output = out.conjMaxCff;
-        thresh = 3*threshold ;
+        thresh = 3 * threshold;
 
     elseif strcmp(type,'nonconj')
         threshold = medfilt1(out.nonConjSumCff,300);
         output = out.nonConjSumCff;
-        thresh = 2.3*threshold;
+        thresh = threshold * 2.3;
 
     end
 
+
+    
     indices = find(output>thresh);
     diff_arr = diff(indices);
     if ~isrow(diff_arr)
