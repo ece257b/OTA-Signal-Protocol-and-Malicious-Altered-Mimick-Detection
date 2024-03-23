@@ -1,9 +1,12 @@
 clear all; close all;
 
 
+WINDOW = 200;
+SCALE = 2.8;
+
 %% Load data
 % Specify the directory containing the .m files
-directory = '/mnt/intB-ssdr0-240gb/chenk/cycloModRec/data/ssca/zigbee/altered-0';
+directory = '/mnt/intB-ssdr0-240gb/chenk/cycloModRec/data/ssca/example';
 
 % Get a list of all .m files in the directory
 files = dir(fullfile(directory, '*.dat'));
@@ -13,8 +16,20 @@ training = {};
 
 % Loop through validFileCount = 0;each file
 validFileCount = 0;
-for k = 1:ceil(length(files) * 0.5)
-    if endsWith(files(k).name, "sum_nonconj.dat")
+for k = 1:ceil(length(files))
+    if endsWith(files(k).name, "alphas.dat")
+        % Construct the full file path
+        filePath = fullfile(directory, files(k).name);
+    
+        % Load the file
+        fid = fopen(filePath, 'rb');
+        alphas = fread(fid, inf, 'single');
+        fclose(fid);
+
+        continue;
+    end
+
+    if endsWith(files(k).name, "max_nonconj.dat")
         validFileCount = validFileCount + 1;
 
         % Construct the full file path
@@ -60,8 +75,8 @@ figure; plot(alphas, pk_avg); hold on;
 
 
 %% Filter out the peaks 
-threshold = medfilt1(dcRatios,100);
-thresh = 5 * threshold;
+threshold = medfilt1(dcRatios,WINDOW);
+thresh = SCALE * threshold;
 
 indices = find(dcRatios>thresh);
 diff_arr = diff(indices);
@@ -102,11 +117,11 @@ max_pk = max(cycle_peak_heights);
 min_pk = min(cycle_peak_heights);
 cycle_peak_heights = (cycle_peak_heights - min_pk) / (max_pk - min_pk);
 
-save('data/centriods/zigbee.mat', "cycle_peak_heights");
-save('data//centriods/zigbee_pk_pos.mat', 'cycle_peaks');
+save('data/centriods/example_pk_hgt.mat', "cycle_peak_heights");
+save('data/centriods/example_pk_pos.mat', 'cycle_peaks');
 
 range_begin = indices(filtered_pattern_starts);
 range_end = indices(filtered_pattern_ends);
 
-save("data/centriods/zigbee_range_starts.mat", "range_begin");
-save("data/centriods/zigbee_range_ends.mat", "range_end");
+save("data/centriods/example_range_starts.mat", "range_begin");
+save("data/centriods/example_range_ends.mat", "range_end");
