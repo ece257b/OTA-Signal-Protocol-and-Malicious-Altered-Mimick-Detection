@@ -2,6 +2,8 @@
 This repository contains the codebase for blind modulation recognition using second-order cyclostationary features. 
 
 ## For ECE257B
+**!!! My report is on the branch `ssca_template`.**
+
 ### Dataset
 The `\data` folder contains the SSCA, PSD and SSCA templates (called `centroid`). Note that the WiFi data is broken, and only Zigbee has alteration data.
 
