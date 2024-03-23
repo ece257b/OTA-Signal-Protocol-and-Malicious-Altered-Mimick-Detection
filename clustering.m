@@ -67,7 +67,7 @@ end
 
 
 %% Radhika's dataset
-radhika_dataset = '/mnt/intA-ssdr0-1tb/chenk/dataset/radhika_ssca';
+radhika_dataset = '/mnt/intB-ssdr0-240gb/chenk/cycloModRec/data/ssca/sc_ssca';
 
 dataset_mods = dir(radhika_dataset);
 
