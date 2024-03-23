@@ -1,6 +1,7 @@
-function distance = getDistance(src_dir, cycle_peak_heights, range_begin, range_end)
+function distance = getDistance(src_dir, cycle_peaks, cycle_peak_heights, range_begin, range_end)
 
     testing = {};
+    filenames = {};
     % Get a list of all .dat files in the directory
     files = dir(fullfile(src_dir, '*.dat'));
     
@@ -20,6 +21,7 @@ function distance = getDistance(src_dir, cycle_peak_heights, range_begin, range_
             % Assuming the variable name is 'yourVariableName'
             % Store the data in the cell array
             testing{validFileCount} = data;
+            filenames{validFileCount} = files(k).name;
         end
     end
 
@@ -34,10 +36,16 @@ function distance = getDistance(src_dir, cycle_peak_heights, range_begin, range_
 
         [this_cycle_peaks, this_cycle_peak_heights, this_peak_prominence] = peakFinderInRange(normalized_nonConjMaxCff, range_begin, range_end);
 
-        %if(distance(i) < 0.2)
-        %    figure(2); plot(normalized_nonConjMaxCff); hold on;
-        %end
-        
-        distance(i) = sum(abs(cycle_peak_heights - this_cycle_peak_heights .* mySigmoid(this_peak_prominence, 1, 1)));
+        distance(i) = max(abs(cycle_peak_heights - this_cycle_peak_heights));
+ 
+        % if(i == 10)
+           % figure; plot(linspace(-1, 1, length(normalized_nonConjMaxCff)), normalized_nonConjMaxCff); hold on;
+           % plot(cycle_peaks, cycle_peak_heights, "rv"); 
+           % (this_cycle_peaks, this_cycle_peak_heights, 'gv'); hold off;
+           % display(filenames{i});
+           % pause;
+        % end
+                
+        % sum(abs(cycle_peak_heights - this_cycle_peak_heights .* mySigmoid(this_peak_prominence, 1, 1)));
     end
 end
