@@ -1,6 +1,22 @@
 # CycloModRec - Blind Modulation Classification for RF Spectrum Sensing 
-
 This repository contains the codebase for blind modulation recognition using second-order cyclostationary features. 
+
+## For ECE257B
+### Dataset
+The `\data` folder contains the SSCA, PSD and SSCA templates (called `centroid`). Note that the WiFi data is broken, and only Zigbee has alteration data.
+
+### Data Evaluation
+**Step 1:** Clone the repo and checkout to the correct branch.
+```
+git clone git@github.com:ece257b/OTA-Signal-Protocol-and-Malicious-Altered-Mimick-Detection.git
+git checkout ssca_template
+```
+**Step 2:** Get SSCA template. In MatLab, open `commonPeakFinder.m`. Change the variable `directory` (line 9) to load the SSCA dataset you want. Modify the variable `WINDOW` and `SCALE` (line 4-5) to get clean SSCA template. Usually, `WINDOW` around 200 and `SCALE` around 3 gives clean template. 
+
+**Step 3:** Clustering using the template. Open `clustering.m`. Change the centriods to load (line 22-25) and datasets to compare (line 3-6), you can get the clustering of different protocols. If you centriod is Zigbee, you can also observe the shift in similarity distribution due to alteration.
+
+**Step 4:** Check PSD. Open `plotPSD.m`, change the variable `directoryPath` at line 9 to plot the PSD of the protocol you want.
+
 
 ## Pre-processing 
 The necessary pre-processing steps for the classifier are the application of an energy detector after the datasets are created (both synthetic and over-the-air). The performance can be evaluated with both a practical energy detector, as well as a dummy energy detector (to serve as a baseline). Each time-frequency boxed signal should have a 32-bit complex binary I/Q file, as well as metadata associated with it. 
